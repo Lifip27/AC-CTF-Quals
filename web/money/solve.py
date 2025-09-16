@@ -61,18 +61,16 @@ def extract_flags(text):
     return out
 
 def main():
-    print("[*] Building plugin…")
     blob = build_plugin_bytes()
-    print("[*] Uploading…")
+    print(f"uploaded plugin")
     assert upload(blob), "upload failed"
-    print("[*] Locating UID…")
     uid = find_uid(); assert uid, "could not find widget UID"
-    print("[*] Fetching widget:", uid)
+    print("fetching widget:", uid)
     page = fetch_widget(uid)
     open("widget_log.html","w").write(page)
     flags = extract_flags(page)
     if flags:
-        print("\n[+] Flags found:")
+        print("\nflags found:")
         for f in flags: print("   ", f)
     else:
         print("\n[!] No obvious flag regex hit. Open widget_log.html and search for 'MUHAHAHAHA:' or 'CTF{'.")
