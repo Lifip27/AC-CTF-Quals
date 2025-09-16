@@ -70,10 +70,10 @@ def main():
     open("widget_log.html","w").write(page)
     flags = extract_flags(page)
     if flags:
-        print("\nflags found:")
+        print("flags found:")
         for f in flags: print("   ", f)
     else:
-        print("\n[!] No obvious flag regex hit. Open widget_log.html and search for 'MUHAHAHAHA:' or 'CTF{'.")
+        print("no flag")
 
 if __name__ == "__main__":
     main()

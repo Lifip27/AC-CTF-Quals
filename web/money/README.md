@@ -114,6 +114,32 @@ page = requests.get(f"{BASE}/widget/{uid}").text
 open("widget_log.html","w").write(page)
 ```
 
+### 7. Check for flag
+
+```python
+def extract_flags(text):
+    pats = [r"CTF\{[^}]+\}", r"UPT\{[^}]+\}", r"flag\{[^}]+\}"]
+    found = []
+    for p in pats:
+        found += re.findall(p, text, flags=re.IGNORECASE)
+    m = re.search(r"MUHAHAHAHA:\s*([A-Za-z0-9_\-\{\}]+)", text)
+    if m: found.append(m.group(1))
+    seen = set(); out=[]
+    for f in found:
+        if f not in seen:
+            seen.add(f); out.append(f)
+    return out
+
+...
+# in main...
+flags = extract_flags(page)
+    if flags:
+        print("flags found:")
+        for f in flags: print("   ", f)
+    else:
+        print("no flag")
+```
+
 
 
 ### Flag:  CTF{9fb64c8a4d81f9d0e1f4108467bee58db112d0d1457fa3716cc6a46231803686}
