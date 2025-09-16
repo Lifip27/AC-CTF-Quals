@@ -3,6 +3,7 @@
 ![Proof](proof.png)
 
 **Author:** `0v3rCl0kEd`  
+**Solves**: 50
 
 ---
 
