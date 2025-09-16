@@ -63,10 +63,12 @@ Result: after upload + execution, visiting /widget/<uid> will serve the index.ht
 ### 2. Build plugin ZIP (in-memory)
 
 Create a ZIP containing the files the portal expects:
+```bash
 - plugin_manifest.json   # {"name": NAME, "version":"1.0", "author":"me", "icon":"thumbnail.svg"}
 - thumbnail.svg          # small dashboard icon
 - index.html             # placeholder (payload will overwrite this on the server)
 - init.py                # the payload (INIT_PY) shown above
+```
 
 ### 3. Encrypt to .plugin format
 
