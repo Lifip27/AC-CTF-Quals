@@ -20,6 +20,7 @@ Challenge|Author|Solves
 Challenge|Author|Solves
 -|-|-
 [Hidden in The Cartridge](<./forensics/Hidden-in-the-Cartridge/>)|AAntioch|84
+[unknown-traffic1](<./forensics/unknown-traffic1/>)|thek0der|52
 
 ## Web
 
