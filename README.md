@@ -408,7 +408,7 @@ There is our flag!
 
 # unknown-traffic1
 
-![Proof](proof.png)
+![Proof](/forensics/unknown-traffic1/proof.png)
 
 **Author:** `thek0der`  
 **Solves:** 52
