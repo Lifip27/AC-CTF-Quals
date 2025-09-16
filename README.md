@@ -12,14 +12,14 @@
 
 Challenge|Author|Solves
 -|-|-
-[Escaping Barcelona](#Escaping Barcelona>)|0v3rCl0kEd|50
-[Rugina](#rugina>)|thek0der|36
+[Escaping Barcelona](<./misc/Escaping-Barcelona>)|0v3rCl0kEd|50
+[Rugina](<./misc/rugina>)|thek0der|36
 
 ## Forensics
 
 Challenge|Author|Solves
 -|-|-
-[Hidden in The Cartridge](<#Hidden-in-the-Cartridge/>)|AAntioch|84
+[Hidden in The Cartridge](<./forensics/Hidden-in-the-Cartridge/>)|AAntioch|84
 
 ## Web
 
@@ -32,7 +32,7 @@ Challenge|Author|Solves
 
 ---
 
-## Hidden-in-the-Cartridge
+## Hidden in the Cartridge
 
 ![Proof](/forensics/Hidden-in-the-Cartridge/proof.png)
 
