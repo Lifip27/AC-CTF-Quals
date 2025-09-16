@@ -9,9 +9,7 @@
 
 ## Description
 
-A brand new language is born — **Rugină** (Rust in Romanian).  
-They give us a compiler web UI where we can paste our “Rugină” code, compile, and see the output.  
-Of course, the flag is hidden in the container. Can we grab it?
+Aren't you tired of rust? I found the perfect solution for you! Welcome to Rugină. Since there is no compiler for it yet, I made one for you.  
 
 ---
 
