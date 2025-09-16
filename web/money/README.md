@@ -11,7 +11,7 @@
 
 This isn't wordpress...
 
-We get: `Hidden_in_the_Cartridge.7z`
+We get: `Server.py`
 ---
 
 ## Vulnerabilities
