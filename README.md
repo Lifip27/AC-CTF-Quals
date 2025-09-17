@@ -29,6 +29,7 @@ Challenge|Author|Solves
 [money](<./web/money>)|stancium|61
 [random-gallery](<./web/random-gallery>)|RaduTek|62
 [theme-generator](<./web/theme-generator>)|thek0der|56
+[dot-private-key](<./web/dot-private-key>)|RaduTek|26
 
 ## Reverse Engineering
 
