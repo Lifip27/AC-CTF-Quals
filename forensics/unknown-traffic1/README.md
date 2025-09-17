@@ -6,6 +6,13 @@
 **Solves:** 52
 
 ---
+## Description
+
+Can you find the hidden message in this pcap file?
+
+We get: `unknown-traffic1.pcap`
+---
+
 
 ## Solve
 
