@@ -14,6 +14,7 @@ Challenge|Author|Solves
 -|-|-
 [Escaping Barcelona](<./misc/Escaping-Barcelona>)|0v3rCl0kEd|50
 [Rugina](<./misc/rugina>)|thek0der|36
+[kidnapped_by_llamas](<./misc/kidnapped_by_llamas>)|iseline27424|16
 
 ## Forensics
 
@@ -23,6 +24,7 @@ Challenge|Author|Solves
 [unknown-traffic1](<./forensics/unknown-traffic1/>)|thek0der|52
 [unknown-traffic2](<./forensics/unknown-traffic2/>)|thek0der|66
 [baofeng](<./forensics/baofeng/>)|0v3rCl0kEd|29
+[vanguard](<./forensics/vanguard/>)|thek0der|10
 
 ## Web
 
