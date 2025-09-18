@@ -15,6 +15,8 @@ Challenge|Author|Solves
 [Escaping Barcelona](<./misc/Escaping-Barcelona>)|0v3rCl0kEd|50
 [Rugina](<./misc/rugina>)|thek0der|36
 [kidnapped_by_llamas](<./misc/kidnapped_by_llamas>)|iseline27424|16
+[octojail](<./misc/octojail>)|thek0der|85
+[onions1](<./misc/onions1>)|thek0der|131
 
 ## Forensics
 
@@ -55,4 +57,14 @@ Challenge|Author|Solves
 Challenge|Author|Solves
 -|-|-
 [neverending_randomness](<./crypto/neverending-randomness/>)|stancium|31
+[Repeated-RSA](<./crypto/Repeated-RSA>)|0v3rCl0kEd|101
+[SSS](<./crypto/sss>)|0v3rCl0kEd|74
+
+
+## Pwn
+
+Challenge|Author|Solves
+-|-|-
+[baby-bof](<./pwn/baby-bof>)|thek0der|105
+
 ---
