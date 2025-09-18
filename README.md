@@ -66,5 +66,6 @@ Challenge|Author|Solves
 Challenge|Author|Solves
 -|-|-
 [baby-bof](<./pwn/baby-bof>)|thek0der|105
+[teenage-rof](<./pwn/teenage-rof>)|stancium|7
 
 ---
