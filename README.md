@@ -26,7 +26,7 @@ Challenge|Author|Solves
 [unknown-traffic1](<./forensics/unknown-traffic1/>)|thek0der|52
 [unknown-traffic2](<./forensics/unknown-traffic2/>)|thek0der|66
 [baofeng](<./forensics/baofeng/>)|0v3rCl0kEd|29
-[vanguard](<./forensics/vanguard/>)|thek0der|10
+[anticheat](<./forensics/anticheat/>)|thek0der|10
 
 ## Web
 
