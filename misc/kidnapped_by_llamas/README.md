@@ -18,7 +18,7 @@ The llamas prepare their ancient sacrifice… time is running out. Your mission:
 
 Flag format: CTF{E:N} where E and N are the coordinates in degrees with 2 decimals (truncate, don’t round).
 
-We get `kingdom_of_llamas.jpg` (very cute photos!)
+We get `kingdom_of_llamas.jpg` (very cute photo! 🦙🦙🦙)
 
 ## Solve
 
