@@ -51,6 +51,7 @@ Challenge|Author|Solves
 -|-|-
 [ancient_house](<./osint/ancient_house/>)|iseline27424|16
 [holiday_trip](<./osint/holiday_trip/>)|iseline27424|67
+[prison](<./osint/prison/>)|stancium|23
 
 ## Crypto
 
