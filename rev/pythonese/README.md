@@ -5,6 +5,7 @@
 **Author:** `stancium`  
 **Solves:** 27
 
+**writeup made by** `lifip27`
 ---
 
 ## Description

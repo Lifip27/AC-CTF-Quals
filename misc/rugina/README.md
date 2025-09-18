@@ -5,6 +5,7 @@
 **Author:** `thek0der`  
 **Solves:** 36
 
+**writeup made by** `lifip27`
 ---
 
 ## Description

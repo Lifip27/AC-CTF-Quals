@@ -5,6 +5,7 @@
 **Author:** `RaduTek`  
 **Solves:** 26
 
+**writeup made by** `lifip27`
 ---
 
 ## Description
