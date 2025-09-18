@@ -59,6 +59,7 @@ Challenge|Author|Solves
 [neverending_randomness](<./crypto/neverending-randomness/>)|stancium|31
 [Repeated-RSA](<./crypto/Repeated-RSA>)|0v3rCl0kEd|101
 [SSS](<./crypto/sss>)|0v3rCl0kEd|74
+[XORbitant](<./crypto/XORbitant>)|stancium|40
 
 
 ## Pwn
