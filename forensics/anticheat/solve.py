@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 import sys,struct,base64,zlib,re,zipfile
 from pathlib import Path
 

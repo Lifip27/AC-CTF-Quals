@@ -81,3 +81,5 @@ scanned 10000 files, found 1 hits
 ```
 
 ### Flag: ctf{8a11dec7958808f0145aa8bb958f2332a53b6c210776adb9264738b9a31f65cf}
+
+Super cool challenge,  Kudos to `thek0der` !
