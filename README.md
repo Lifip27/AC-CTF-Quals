@@ -20,7 +20,7 @@ Challenge|Author|Solves
 [onions2](<./misc/onions2>)|thek0der|24
 [disco_dance](<./misc/disco_dance/>)|...|22
 [disco_rave](<./misc/disco_rave/>)|...|19
-[discord](<./misc/discord/>)|...|16
+[discord](<./misc/discord/>)|thek0der|16
 
 ## Forensics
 
