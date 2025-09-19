@@ -17,6 +17,10 @@ Challenge|Author|Solves
 [kidnapped_by_llamas](<./misc/kidnapped_by_llamas>)|iseline27424|16
 [octojail](<./misc/octojail>)|thek0der|85
 [onions1](<./misc/onions1>)|thek0der|131
+[onions2](<./misc/onions2>)|thek0der|24
+[disco_dance](<./misc/disco_dance/>)|...|22
+[disco_rave](<./misc/disco_rave/>)|...|19
+[discord](<./misc/discord/>)|...|16
 
 ## Forensics
 
@@ -70,5 +74,8 @@ Challenge|Author|Solves
 -|-|-
 [baby-bof](<./pwn/baby-bof>)|thek0der|105
 [teenage-rof](<./pwn/teenage-rof>)|stancium|7
+[fini](<./pwn/fini>)|thek0der|46
+[sigdance](<./pwn/sigdance>)|stancium|58
+[Minecrafty](<./pwn/Minecrafty>)|0v3rCl0kEd|11
 
 ---
