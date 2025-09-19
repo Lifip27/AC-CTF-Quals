@@ -15,6 +15,8 @@ Challenge|Author|Solves
 [Escaping Barcelona](<./misc/Escaping-Barcelona>)|0v3rCl0kEd|50
 [Rugina](<./misc/rugina>)|thek0der|36
 [kidnapped_by_llamas](<./misc/kidnapped_by_llamas>)|iseline27424|16
+[octojail](<./misc/octojail>)|thek0der|85
+[onions1](<./misc/onions1>)|thek0der|131
 
 ## Forensics
 
@@ -24,7 +26,7 @@ Challenge|Author|Solves
 [unknown-traffic1](<./forensics/unknown-traffic1/>)|thek0der|52
 [unknown-traffic2](<./forensics/unknown-traffic2/>)|thek0der|66
 [baofeng](<./forensics/baofeng/>)|0v3rCl0kEd|29
-[vanguard](<./forensics/vanguard/>)|thek0der|10
+[anticheat](<./forensics/anticheat/>)|thek0der|10
 
 ## Web
 
@@ -49,10 +51,23 @@ Challenge|Author|Solves
 -|-|-
 [ancient_house](<./osint/ancient_house/>)|iseline27424|16
 [holiday_trip](<./osint/holiday_trip/>)|iseline27424|67
+[prison](<./osint/prison/>)|stancium|23
 
 ## Crypto
 
 Challenge|Author|Solves
 -|-|-
 [neverending_randomness](<./crypto/neverending-randomness/>)|stancium|31
+[Repeated-RSA](<./crypto/Repeated-RSA>)|0v3rCl0kEd|101
+[SSS](<./crypto/sss>)|0v3rCl0kEd|74
+[XORbitant](<./crypto/XORbitant>)|stancium|40
+
+
+## Pwn
+
+Challenge|Author|Solves
+-|-|-
+[baby-bof](<./pwn/baby-bof>)|thek0der|105
+[teenage-rof](<./pwn/teenage-rof>)|stancium|7
+
 ---
