@@ -1,18 +1,18 @@
-# Repeated RSA
+# baby-bof
 
 ![Proof](proof.png)
 
-**Author:** `0v3rCl0kEd`  
-**Solves:** 101
+**Author:** `thek0der`  
+**Solves:** 105
 
 **writeup made by** `vlad`
 ---
 
 ## Description
 
-We've been told that multiple RSA encryptions can strengthen the security. Not sure if it's alright though...
+This is your first pwn challenge.
 
-No source code required but we will provide one if there are no solves in the first 16 hours.
+We get a `challange` binary
 
 ---
 
@@ -23,34 +23,122 @@ First i connected to the remote server to see what we get.
 When we connect we get the following output:
 
 ```
-Encrypted Flag: 26059411219269871628597430631874141698196115199954610172019530946929474083139167419949575161706771234381715067627051183759560330747976418837370283565671064620192516584689880215852291614771859837830944826668535326557211557332899976667173687163769823557559451806114841753330852792753736174587043467037971785046557820390723339448531849128588003498335289544688930299427502352121220568733551811031948308917510432581344367403945206066868156545420308481555191336870839114578236016400349989941656759889009974872503540100254847527375227881241881006092233374728597591341835839563225179068533512021835661400390800750840510330149
-n1: 17497982602971136621123328440996971853803659365687373071288904895047318003931238038256090553217282428699174809158964649131892217083797058747932641680414496848071090319371928731967537104408247250059372537369295064129400745038928835422329987510606827060936740037252451883007531145343915981592859051791523956569443071513846470728617119805791740633662392907222637099525839696831354090355257947437800045322630200260708698699299568509023536562175501372813549616261636651788153601347106273395632929570414896249621532598259542187999885391935145854214683155808744077122156857505504917246901138429801999476596915315730546876357
-
-n2: 20081652170288378230419844711520363073101127641165142243621936990046356004269160591870738742888572132680757043258582371418826005377139614856149309729016908745995735743786509597920827604297905929275662410809191378498627808790868305438743612315756503371857315778011318099074714516684562717903809518306160765360107888879980992913286349845378958755176750348780882327832051466332796567390616762777440378555806396497063385204521327757088545421530111978731172202954951833746112599481035110409088152722252105587225582893131754760098019885502472137507871412149414355803275123698733556031145986595638527181000668117408470360149
-
-n3: 26433653881579779142226750707501733333780892300195670946454218587313307628603742066888811442537203955410042536290848238521900722744225050236019195131061372266743419732228500773712563500862659611019119193464338701755840000971727843583861083716079031482390518445501292869813107221177002552168215066102134409517712170782052728586562621376786365073760580232539738911982602894727454074089533194719711283681268627545876539740228429719547921395061909978621318405015003705286916846195767134311021519627892948225562426049272830536192035096632773022199443173691092529417387690924267137305677102554936108327327414023394391283833
-
-e: 65537
+Bine ai venit la PWN!
+Spune ceva:
+test
+La revedere!
 ```
 
-The description hinted at `multiple RSA encryptions.`
+I inputed `test` when it asked for input and we got disconnected.
 
-This means that the flag was encrypted sequentially wtih the same `e` exponent but under 3 different moduli n1,n2 and n3.
-
-Since the moduli was the same for each one this means they shared prime factors and we can use `gcd` to factor each modulus.
-
-With the factors we computed the private keys d1,d2 and d3 and decrypted in reverse order:
-
-Decrypt with d3 mod n3.
-Then d2 mod n2.
-And finally d1 mod n1.
-
-I made a simple script(`solve.py`) to automate this process.
-
-After running the script we get the following output to our terminal:
+The next step is to analyze the binary localy we can first run checksec to check its properties.
 
 ```
-b'ctf{3c1315f63d550570a690f693554647b7763c3acbc806ae846ce8d25b5f364d10}'
+[!] Could not populate PLT: Cannot allocate 1GB memory to run Unicorn Engine
+[*] '/Users/vlad/Downloads/acctf/AC-CTF-Quals/pwn/baby-bof/challenge'
+    Arch:       amd64-64-little
+    RELRO:      Partial RELRO
+    Stack:      No canary found
+    NX:         NX enabled
+    PIE:        No PIE (0x400000)
+    Stripped:   No
+```
+
+This looks good the binary has no PIE and no canary the only thing we have to mindfull of is NX and the fact that it uses little endian.
+
+Next i opened up the file in `IDA Professional 9.1` and we saw 3 intresting functions: main, vuln and win.
+
+After decoding each one we see the following code:
+
+### main:
+
+```c
+int __fastcall main(int argc, const char **argv, const char **envp)
+{
+  setvbuf(_bss_start, 0, 2, 0);
+  setvbuf(stdin, 0, 2, 0);
+  puts("Bine ai venit la PWN!");
+  vuln();
+  puts("La revedere!");
+  return 0;
+}
+```
+
+### vuln:
+
+```c
+ssize_t vuln()
+{
+  _BYTE buf[64]; // [rsp+0h] [rbp-40h] BYREF
+
+  puts("Spune ceva:");
+  fflush(_bss_start);
+  return read(0, buf, 0x100u);
+}
+```
+
+### win:
+
+```c
+void __noreturn win()
+{
+  char s[136]; // [rsp+0h] [rbp-90h] BYREF
+  FILE *stream; // [rsp+88h] [rbp-8h]
+
+  stream = fopen("flag.txt", "r");
+  if ( !stream )
+  {
+    puts("Flag missing.");
+    fflush(_bss_start);
+    exit(1);
+  }
+  if ( fgets(s, 128, stream) )
+  {
+    puts(s);
+    fflush(_bss_start);
+  }
+  fclose(stream);
+  exit(0);
+}
+```
+
+We can clearly see that this is a classic stack buffer overflow the buffer is 64 bytes but the code reads 256 bytes.
+
+Since the vuln function returns the flag we just need to overwrite the saved return address to the win function.
+
+Remembering that PIE was disabled addresses are stable we can find out where the win function is using nm:
+
+```
+nm challenge | grep win
+
+0000000000401196 T win
+```
+
+Now we need to calculate the offset to where we need to write the address to.
+
+The stack frame layout is:
+	•	64 bytes: buffer
+	•	8 bytes: saved RBP
+	•	Next 8 bytes: saved RIP (return address)
+
+So after 72 bytes, we land exactly on the return address.
+
+We have to keep in mind that the binary uses little endian but our exploit layout looks like this:
+
+### [ 64 bytes filler ] + [ 8 bytes filler ] + [ win() address ]
+
+I made a simple script(`solve.py`) that does this automatically and prints the flag but it can easily be done manually.
+
+After running the script we get the following output:
+
+```
+[*] Received: Bine ai venit la PWN!
+[*] Sending payload...
+[*] Flag output:
+ 
+Spune ceva:
+ctf{3c1315f63d550570a690f693554647b7763c3acbc806ae846ce8d25b5f364d10}
+
 ```
 
 
